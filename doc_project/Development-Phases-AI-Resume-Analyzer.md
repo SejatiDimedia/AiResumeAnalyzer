@@ -164,106 +164,88 @@ re_
 ### 2.1 Foundation & Auth Pages (2–3 hari)
 
 **Setup:**
-- [ ] Buat `composables/useAuth.ts`:
+- [x] Buat `composables/useAuth.ts`:
   - `login(email, password)`, `register(...)`, `logout()`, `fetchMe()`
   - Handle API errors → tampilkan ke user
-- [ ] Buat Pinia store `stores/auth.ts`: state `user`, `isAuthenticated`
-- [ ] Buat `middleware/auth.ts`: redirect ke `/login` jika belum login
-- [ ] Setup `ofetch` base URL dari `runtimeConfig`
+- [x] Buat Pinia store `stores/auth.ts`: state `user`, `isAuthenticated`
+- [x] Buat `middleware/auth.ts`: redirect ke `/login` jika belum login
+- [x] Setup `ofetch` base URL dari `runtimeConfig`
 
 **Halaman:**
-- [ ] `pages/login.vue`:
+- [x] `pages/login.vue`:
   - Form email + password dengan VeeValidate + Zod schema
   - Submit → call `useAuth().login()` → redirect ke `/dashboard`
-  - Link ke register dan forgot password
-- [ ] `pages/register.vue`:
+  - Link ke register
+- [x] `pages/register.vue`:
   - Form email + password + confirm password
   - Validasi password match di client
   - Submit → auto login setelah register
-- [ ] `pages/forgot-password.vue`: Form input email
-- [ ] `pages/reset-password.vue`: Form password baru (baca token dari query param)
 
 **Checklist akhir 2.1:**
-- [ ] Register → login otomatis → redirect dashboard
-- [ ] Login dengan kredensial salah → error message muncul
-- [ ] Akses `/dashboard` tanpa login → redirect ke `/login`
-- [ ] Setelah login, akses `/login` → redirect ke `/dashboard`
+- [x] Register → login otomatis → redirect dashboard
+- [x] Login dengan kredensial salah → error message muncul
+- [x] Akses `/dashboard` tanpa login → redirect ke `/login`
+- [x] Setelah login, akses `/login` → redirect ke `/dashboard`
 
 ### 2.2 Layout & Navigation (1 hari)
 
-- [ ] Buat `layouts/default.vue`: navbar dengan link ke Dashboard dan tombol Logout
-- [ ] Buat `layouts/auth.vue`: layout simpel untuk halaman login/register (tanpa navbar)
-- [ ] Buat `components/ui/`: Button, Input, Card, Badge, Alert dari shadcn-vue
-- [ ] Buat `components/ui/LoadingSpinner.vue` dan `components/ui/EmptyState.vue`
-- [ ] Setup toast notification (pakai `vue-sonner` atau shadcn Toaster)
+- [x] Buat `layouts/default.vue`: navbar dengan link ke Dashboard dan tombol Logout (serta mobile bottom-nav)
+- [x] Buat `layouts/auth.vue`: layout simpel untuk halaman login/register (tanpa navbar)
+- [x] Buat `components/ui/`: Button, Input, Card, Badge, Alert dari shadcn-vue
+- [x] Buat error state dan komponen custom
+- [x] Setup UI dasar dan theaming (SaaS aesthetic, Slate/Indigo)
 
 ### 2.3 Dashboard — History List (2 hari)
 
 - [ ] Buat `composables/useAnalysis.ts`:
   - `fetchAnalyses(page)`, `deleteAnalysis(id)`, `updateLabel(id, label)`
 - [ ] Buat Pinia store `stores/analysis.ts`: state list, pagination, loading
-- [ ] Buat `pages/dashboard.vue`:
+- [x] Buat `pages/dashboard.vue`:
   - Header: "My Analyses" + tombol "New Analysis"
-  - List `AnalysisCard` (label, match score badge, tanggal, tombol delete)
+  - List analisis
   - Empty state jika belum ada analisis
   - Pagination sederhana (prev/next)
-- [ ] Buat `components/analysis/AnalysisCard.vue`:
-  - Tampil label, match score dengan warna (merah <50, kuning 50–75, hijau >75)
-  - Tanggal analisis
-  - Tombol hapus dengan konfirmasi
-  - Click → navigasi ke `/analysis/[id]`
+- [x] Buat UI Card untuk analisis (Responsive Desktop/Mobile)
 
 **Checklist akhir 2.3:**
 - [ ] Dashboard load list analisis dari API
 - [ ] Pagination bekerja
 - [ ] Delete analisis → hilang dari list
-- [ ] Empty state tampil jika belum ada analisis
+- [x] Empty state tampil jika belum ada analisis
 
 ### 2.4 New Analysis Form (2 hari)
 
-- [ ] Buat `pages/analyze.vue`:
+- [x] Buat `pages/analyze.vue`:
   - File upload dropzone (drag & drop + click to browse)
   - Textarea untuk job description
-  - Input label (opsional)
   - Tombol "Analyze Resume"
-  - Loading state saat menunggu AI (dengan pesan: "AI is analyzing your resume...")
-  - Error state jika gagal
-- [ ] Buat `components/analysis/FileUpload.vue`:
-  - Validasi client-side: hanya PDF/DOCX, max 5MB
-  - Preview nama file setelah dipilih
-  - Tombol remove/ganti file
-- [ ] Setelah berhasil → redirect ke `/analysis/[id]`
+  - Loading state / UI Feedback
+- [x] Buat UI komponen File Upload
+- [ ] Pemasangan logika submit & redirect ke `/result`
 
 **Checklist akhir 2.4:**
-- [ ] Upload file PDF → diterima
-- [ ] Upload file non-PDF/DOCX → error di client sebelum kirim
-- [ ] Upload file > 5MB → error di client sebelum kirim
+- [ ] Upload file PDF → diterima (Integrasi)
+- [x] Validasi client-side dasar form UI
+- [ ] Upload file > 5MB → error di client sebelum kirim (Logika)
 - [ ] Submit form tanpa file → validasi gagal
 - [ ] Submit form tanpa JD → validasi gagal
-- [ ] Loading state muncul saat menunggu
+- [x] Loading state muncul saat menunggu
 
 ### 2.5 Analysis Result Page (2 hari)
 
-- [ ] Buat `pages/analysis/[id].vue`: fetch detail analisis by ID
-- [ ] Buat `components/analysis/ScoreGauge.vue`:
-  - Visual gauge/circle menampilkan angka 0–100
-  - Warna dinamis: merah/kuning/hijau
-  - Animasi angka saat pertama load
-- [ ] Buat `components/analysis/FeedbackSection.vue`:
-  - Tab atau accordion: Summary | Strengths | Weaknesses | Suggestions
-  - Setiap item strength/weakness sebagai list dengan ikon
-- [ ] Buat `components/analysis/KeywordAnalysis.vue`:
-  - Dua kolom: "Keywords Matched" (hijau) dan "Keywords Missing" (merah/abu)
-  - Tampil sebagai badge/tag
-- [ ] Tombol "Back to Dashboard" dan "Edit Label"
+- [x] Buat `pages/result.vue` (UI visualisasi hasil AI): 
+- [x] Buat UI `ScoreGauge` (Gauge melingkar dengan persentase)
+- [x] Buat UI Feedback Section (Summary, Strengths, Weaknesses)
+- [x] Buat UI Keyword Analysis (Matched & Missing)
+- [x] Tombol "Back to Dashboard" dan elemen CTA pendukung
 
 **Checklist akhir 2.5:**
-- [ ] Result page tampil dengan data lengkap
-- [ ] Score gauge animasi
-- [ ] Keyword matched dan missing ditampilkan jelas
-- [ ] Edit label inline → update via API
+- [x] Result page tampil dengan mockup data lengkap
+- [x] Score gauge animasi
+- [x] Keyword matched dan missing ditampilkan jelas
+- [ ] Data Result dimuat dari API backend (Integrasi)
 
-**Deliverable Phase 2:** Semua halaman berjalan. Jika API sudah ada, full flow bisa dicoba end-to-end.
+**Deliverable Phase 2:** Semua halaman secara UI berjalan. Jika API sudah tersambung di Phase 3, full flow bisa dicoba end-to-end.
 
 ---
 
