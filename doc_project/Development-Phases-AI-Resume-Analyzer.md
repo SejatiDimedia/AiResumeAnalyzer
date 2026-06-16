@@ -83,86 +83,75 @@ re_
 ### 1.1 Auth System (3–4 hari)
 
 **Day 1–2: Foundation**
-- [ ] Buat `utils/security.py`: fungsi `hash_password`, `verify_password`, `create_jwt`, `decode_jwt`
-- [ ] Buat `schemas/auth.py`: `RegisterRequest`, `LoginRequest`, `TokenResponse`, `UserResponse`
-- [ ] Buat `services/auth_service.py`:
+- [x] Buat `utils/security.py`: fungsi `hash_password`, `verify_password`, `create_jwt`, `decode_jwt`
+- [x] Buat `schemas/auth.py`: `RegisterRequest`, `LoginRequest`, `TokenResponse`, `UserResponse`
+- [x] Buat `services/auth_service.py`:
   - `create_user(db, email, password)` — cek duplikat email, hash password, insert
   - `authenticate_user(db, email, password)` — lookup user, verify hash
   - `get_user_by_id(db, user_id)` — untuk dependency injection
-- [ ] Buat `routers/auth.py`: `POST /auth/register`, `POST /auth/login`
-- [ ] Buat `dependencies.py`: `get_current_user` dependency (decode JWT dari cookie/header)
+- [x] Buat `routers/auth.py`: `POST /auth/register`, `POST /auth/login`
+- [x] Buat `dependencies.py`: `get_current_user` dependency (decode JWT dari cookie/header)
 
 **Day 3–4: Password Reset & Middleware**
-- [ ] Buat `services/auth_service.py` tambahan:
+- [x] Buat `services/auth_service.py` tambahan:
   - `create_reset_token(db, email)` — generate token, simpan ke DB
   - `reset_password(db, token, new_password)` — validasi token, update password, mark used
-- [ ] Buat `routers/auth.py` tambahan: `POST /auth/forgot-password`, `POST /auth/reset-password`, `GET /auth/me`, `POST /auth/logout`
-- [ ] Setup rate limiting dengan `slowapi`: max 5 login attempt/menit per IP
-- [ ] Test manual via Swagger UI semua endpoint auth
+- [x] Buat `routers/auth.py` tambahan: `POST /auth/forgot-password`, `POST /auth/reset-password`, `GET /auth/me`, `POST /auth/logout`
+- [x] Setup rate limiting dengan `slowapi`: max 5 login attempt/menit per IP
+- [x] Test manual via Swagger UI semua endpoint auth
 
 **Checklist akhir 1.1:**
-- [ ] Register user baru → berhasil, email unik enforce
-- [ ] Login → dapat JWT token
-- [ ] Hit endpoint protected tanpa token → 401
-- [ ] Hit endpoint protected dengan token → 200
-- [ ] Forgot password → token dibuat di DB
-- [ ] Reset password dengan token valid → password berubah
-- [ ] Reset password dengan token expired/used → error
+- [x] Register user baru → berhasil, email unik enforce
+- [x] Login → dapat JWT token
+- [x] Hit endpoint protected tanpa token → 401
+- [x] Hit endpoint protected dengan token → 200
+- [x] Forgot password → token dibuat di DB
+- [x] Reset password dengan token valid → password berubah
+- [x] Reset password dengan token expired/used → error
 
 ### 1.2 File Parsing Service (1–2 hari)
 
-- [ ] Buat `services/file_service.py`:
+- [x] Buat `services/file_service.py`:
   ```python
   async def extract_text(file: UploadFile) -> str:
       # Validate MIME type (bukan hanya ekstensi)
       # Dispatch ke _extract_pdf() atau _extract_docx()
       # Return cleaned text string
-  
-  def _extract_pdf(content: bytes) -> str:
-      # Menggunakan pypdf2 / pdfminer
-  
-  def _extract_docx(content: bytes) -> str:
-      # Menggunakan python-docx
-  
-  def _clean_text(text: str) -> str:
-      # Strip excessive whitespace, null bytes, dll
   ```
-- [ ] Validasi: max 5MB, hanya PDF/DOCX
-- [ ] Test manual: upload berbagai PDF (single page, multi page, scanned — note: scanned tidak bisa diparse tanpa OCR, beri error message yang jelas)
-- [ ] Test manual: upload DOCX berbagai format
+- [x] Install library pendukung: `PyMuPDF` (atau `pdfplumber`) untuk PDF, `python-docx` untuk DOCX.
+- [x] Buat `routers/upload.py` (opsional untuk test manual, atau langsung digabung ke endpoint AI nanti)
+- [x] Tulis unit test untuk PDF dan DOCX text extraction (minimal file valid vs invalid)
 
 **Checklist akhir 1.2:**
-- [ ] PDF berhasil diekstrak teksnya
-- [ ] DOCX berhasil diekstrak teksnya
 - [ ] File > 5MB → 400 error
 - [ ] File bukan PDF/DOCX → 400 error
 - [ ] PDF scan tanpa teks → error message jelas
 
 ### 1.3 Analysis CRUD (2 hari)
 
-- [ ] Buat `schemas/analysis.py`: `AnalysisCreateRequest`, `AnalysisResponse`, `AnalysisListResponse`, `AnalysisUpdateRequest`
-- [ ] Buat `services/analysis_service.py`:
+- [x] Buat `schemas/analysis.py`: `AnalysisCreateRequest`, `AnalysisResponse`, `AnalysisListResponse`, `AnalysisUpdateRequest`
+- [x] Buat `services/analysis_service.py`:
   - `create_analysis(db, user_id, resume_text, jd, label, ai_result)`
   - `get_analysis_by_id(db, id, user_id)` — pastikan ownership
   - `list_user_analyses(db, user_id, page, per_page)`
   - `update_analysis_label(db, id, user_id, label)`
   - `soft_delete_analysis(db, id, user_id)`
-- [ ] Buat `routers/analysis.py`: semua 5 endpoint CRUD
-- [ ] Semua endpoint dilindungi `get_current_user` dependency
-- [ ] Test manual semua endpoint (gunakan hardcoded AI result dulu, tanpa OpenAI)
+- [x] Buat `routers/analysis.py`: semua 5 endpoint CRUD
+- [x] Semua endpoint dilindungi `get_current_user` dependency
+- [x] Test manual semua endpoint (gunakan hardcoded AI result dulu, tanpa OpenAI)
 
 **Checklist akhir 1.3:**
-- [ ] Create analysis → 201 dengan data
-- [ ] List analysis → paginated, hanya milik user yang login
-- [ ] Get by ID → 404 jika bukan milik user
-- [ ] Update label → berhasil
-- [ ] Delete → soft delete (tetap ada di DB, tidak muncul di list)
+- [x] Create analysis → 201 dengan data
+- [x] List analysis → paginated, hanya milik user yang login
+- [x] Get by ID → 404 jika bukan milik user
+- [x] Update label → berhasil
+- [x] Delete → soft delete (tetap ada di DB, tidak muncul di list)
 
 ### 1.4 Error Handling & Validation Global (0.5 hari)
 
-- [ ] Buat custom exception classes: `NotFoundError`, `ForbiddenError`, `ValidationError`
-- [ ] Daftarkan exception handlers di `main.py` → semua return format JSON konsisten
-- [ ] Test: pastikan semua error return format `{ "error": { "code", "message" } }`
+- [x] Buat custom exception classes: `NotFoundError`, `ForbiddenError`, `ValidationError`
+- [x] Daftarkan exception handlers di `main.py` → semua return format JSON konsisten
+- [x] Test: pastikan semua error return format `{ "error": { "code", "message" } }`
 
 **Deliverable Phase 1:** Semua API endpoint berjalan, bisa ditest via Swagger, termasuk auth, file parsing, dan CRUD analisis.
 

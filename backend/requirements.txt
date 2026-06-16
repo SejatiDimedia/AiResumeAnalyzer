@@ -14,3 +14,8 @@ slowapi
 pytest
 pytest-asyncio
 httpx
+email-validator
+passlib[bcrypt]
+pymupdf
+python-docx
+python-multipart
