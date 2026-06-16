@@ -9,7 +9,7 @@ class AnalysisBase(BaseModel):
 
 # Properties to receive on creation
 class AnalysisCreateRequest(AnalysisBase):
-    resume_text: str = Field(..., description="The extracted text from the resume")
+    resume_text: Optional[str] = Field(None, description="The extracted text from the resume. If omitted, uses the saved profile.")
     job_description: str = Field(..., description="The job description to match against")
 
 # Properties to receive on update

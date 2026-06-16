@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid import UUID
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.dependencies import get_current_user, get_db
 from app.models.user import User
@@ -12,10 +14,15 @@ from app.schemas.analysis import (
 )
 from app.services import analysis_service
 
+limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/analysis", tags=["analysis"])
 
+import os
+
 @router.post("/", response_model=AnalysisResponse, status_code=status.HTTP_201_CREATED)
+@limiter.limit("10/hour")
 async def create_analysis(
+    request: Request,
     obj_in: AnalysisCreateRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
@@ -23,6 +30,13 @@ async def create_analysis(
     """
     Create a new resume analysis.
     """
+    if not obj_in.resume_text:
+        file_path = os.path.join("data/profiles", f"{current_user.id}.txt")
+        if not os.path.exists(file_path):
+            raise HTTPException(status_code=400, detail="No resume provided and no saved profile found.")
+        with open(file_path, "r", encoding="utf-8") as f:
+            obj_in.resume_text = f.read()
+
     analysis = await analysis_service.create_analysis(db=db, user_id=current_user.id, obj_in=obj_in)
     return analysis
 
@@ -88,3 +102,28 @@ async def delete_analysis(
     if not success:
         raise HTTPException(status_code=404, detail="Analysis not found")
     return None
+
+@router.post("/{analysis_id}/cover-letter")
+@limiter.limit("5/hour")
+async def generate_cover_letter(
+    analysis_id: UUID,
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Generate an AI-powered cover letter based on the analysis resume & job description.
+    """
+    from app.services import ai_service
+    
+    analysis = await analysis_service.get_analysis_by_id(db=db, analysis_id=analysis_id, user_id=current_user.id)
+    if not analysis:
+        raise HTTPException(status_code=404, detail="Analysis not found")
+
+    cover_letter = await ai_service.generate_cover_letter(
+        resume_text=analysis.resume_text,
+        job_description=analysis.job_description,
+        job_title=analysis.label or ""
+    )
+
+    return {"cover_letter": cover_letter}

@@ -8,11 +8,52 @@
           <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">New Analysis</h1>
           <p class="text-on-surface-variant font-body-md text-body-md">Optimize your resume against specific job requirements with AI.</p>
         </div>
+
+        <div v-if="errorMessage" class="bg-error/10 border border-error/20 text-error px-4 py-3 rounded-lg text-body-md">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px]">error</span>
+            <p>{{ errorMessage }}</p>
+          </div>
+        </div>
         
         <!-- Section 1: Your Resume -->
         <section class="space-y-4">
-          <h2 class="font-headline-sm text-headline-sm text-on-surface">Your Resume</h2>
-          <div class="dashed-border group cursor-pointer hover:bg-surface-container-low transition-colors duration-200" @click="triggerFileInput">
+          <div class="flex justify-between items-center">
+            <h2 class="font-headline-sm text-headline-sm text-on-surface">Your Resume</h2>
+            <div v-if="hasSavedProfile" class="flex gap-2 bg-surface-container-low p-1 rounded-lg border border-outline-variant/30">
+              <button 
+                @click="useSavedProfile = true" 
+                :class="useSavedProfile ? 'bg-primary text-white' : 'text-on-surface-variant hover:bg-surface-variant/30'"
+                class="px-3 py-1 rounded-md text-label-sm font-label-sm transition-all"
+              >
+                Use Saved Profile
+              </button>
+              <button 
+                @click="useSavedProfile = false" 
+                :class="!useSavedProfile ? 'bg-primary text-white' : 'text-on-surface-variant hover:bg-surface-variant/30'"
+                class="px-3 py-1 rounded-md text-label-sm font-label-sm transition-all"
+              >
+                Upload New
+              </button>
+            </div>
+          </div>
+          
+          <div v-if="hasSavedProfile && useSavedProfile" class="p-6 bg-green-50 border border-green-200 rounded-xl flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                <span class="material-symbols-outlined">description</span>
+              </div>
+              <div>
+                <p class="font-body-md text-body-md text-green-800 font-bold">Using Saved Base Resume</p>
+                <p class="font-body-sm text-body-sm text-green-700">Your profile will be used for this analysis.</p>
+              </div>
+            </div>
+            <NuxtLink to="/profile" class="text-green-600 hover:text-green-800 underline font-label-sm text-label-sm">
+              Manage Profile
+            </NuxtLink>
+          </div>
+
+          <div v-else class="dashed-border group cursor-pointer hover:bg-surface-container-low transition-colors duration-200" @click="triggerFileInput">
             <div class="flex flex-col items-center justify-center py-12 px-6 text-center">
               <span class="material-symbols-outlined text-primary text-[48px] mb-4">cloud_upload</span>
               <p class="font-body-md text-body-md text-on-surface font-semibold" v-if="!selectedFile">Drag & drop your resume here</p>
@@ -114,6 +155,8 @@ import { Textarea } from '~/components/ui/textarea/index'
 import { Input } from '~/components/ui/input/index'
 import { Label } from '~/components/ui/label/index'
 import { useAnalysis } from '~/composables/useAnalysis'
+import { useProfile } from '~/composables/useProfile'
+import { onMounted } from 'vue'
 
 definePageMeta({
   middleware: 'auth'
@@ -121,6 +164,7 @@ definePageMeta({
 
 const router = useRouter()
 const { analyzeResume } = useAnalysis()
+const { fetchSavedResume } = useProfile()
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const selectedFile = ref<File | null>(null)
@@ -129,8 +173,20 @@ const analysisLabel = ref('')
 const isAnalyzing = ref(false)
 const errorMessage = ref('')
 
+const hasSavedProfile = ref(false)
+const useSavedProfile = ref(false)
+
+onMounted(async () => {
+  const profile = await fetchSavedResume()
+  if (profile.has_profile) {
+    hasSavedProfile.value = true
+    useSavedProfile.value = true
+  }
+})
+
 const isValid = computed(() => {
-  return selectedFile.value && jobDescription.value.trim().length > 0
+  const hasResume = useSavedProfile.value || selectedFile.value !== null
+  return hasResume && jobDescription.value.trim().length > 0
 })
 
 const triggerFileInput = () => {
@@ -145,12 +201,14 @@ const onFileChange = (event: Event) => {
 }
 
 const startAnalysis = async () => {
-  if (!isValid.value || !selectedFile.value) return
+  if (!isValid.value) return
+  
+  const fileToAnalyze = useSavedProfile.value ? null : selectedFile.value
   
   isAnalyzing.value = true
   errorMessage.value = ''
   
-  const result = await analyzeResume(selectedFile.value, jobDescription.value, analysisLabel.value || undefined)
+  const result = await analyzeResume(fileToAnalyze, jobDescription.value, analysisLabel.value || undefined)
   
   if (result.success && result.data?.id) {
     // Redirect to the newly created analysis result page
@@ -158,7 +216,6 @@ const startAnalysis = async () => {
   } else {
     isAnalyzing.value = false
     errorMessage.value = result.error || 'Failed to process analysis. Please try again.'
-    alert(errorMessage.value) // Simple error fallback; can be replaced with Toast
   }
 }
 </script>

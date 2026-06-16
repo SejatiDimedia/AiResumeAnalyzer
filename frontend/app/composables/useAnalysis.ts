@@ -16,24 +16,31 @@ export function useAnalysis() {
     return res.extracted_text
   }
 
-  const createAnalysis = async (resumeText: string, jobDescription: string, label?: string) => {
+  const createAnalysis = async (resumeText: string | null, jobDescription: string, label?: string) => {
+    const body: any = {
+      job_description: jobDescription,
+      label: label
+    }
+    if (resumeText) {
+      body.resume_text = resumeText
+    }
+
     const res: any = await apiFetch('/analysis/', {
       method: 'POST',
-      body: {
-        resume_text: resumeText,
-        job_description: jobDescription,
-        label: label
-      }
+      body: body
     })
     return res
   }
 
-  const analyzeResume = async (file: File, jobDescription: string, label?: string) => {
+  const analyzeResume = async (file: File | null, jobDescription: string, label?: string) => {
     try {
-      // 1. Extract text from PDF/DOCX
-      const resumeText = await extractText(file)
+      let resumeText = null
+      if (file) {
+        // 1. Extract text from PDF/DOCX if a file is provided
+        resumeText = await extractText(file)
+      }
       
-      // 2. Create analysis with the extracted text and JD
+      // 2. Create analysis with the extracted text (or empty to use saved profile) and JD
       const analysis = await createAnalysis(resumeText, jobDescription, label)
       
       return { success: true, data: analysis }

@@ -6,21 +6,23 @@ from sqlalchemy import func
 from app.models.analysis import Analysis
 from app.schemas.analysis import AnalysisCreateRequest, AnalysisUpdateRequest
 
+from app.services import ai_service
+
 async def create_analysis(db: AsyncSession, user_id: UUID, obj_in: AnalysisCreateRequest) -> Analysis:
-    # TODO in Phase 2: Integrate with OpenAI here.
-    # For Phase 1.3, we will mock the AI result
-    mock_score = 85.5
-    mock_missing = ["Docker", "Kubernetes"]
-    mock_suggestions = ["Add more details about your Docker experience", "Mention Kubernetes orchestration"]
+    # Phase 3: Integrate with OpenAI
+    ai_result = await ai_service.analyze_resume_vs_jd(
+        resume_text=obj_in.resume_text,
+        job_description=obj_in.job_description
+    )
     
     db_obj = Analysis(
         user_id=user_id,
         resume_text=obj_in.resume_text,
         job_description=obj_in.job_description,
         label=obj_in.label,
-        match_score=mock_score,
-        missing_keywords=mock_missing,
-        suggestions=mock_suggestions
+        match_score=ai_result.match_score,
+        missing_keywords=ai_result.missing_keywords,
+        suggestions=ai_result.suggestions
     )
     db.add(db_obj)
     await db.commit()

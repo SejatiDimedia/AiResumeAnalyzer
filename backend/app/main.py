@@ -1,11 +1,23 @@
+import logging
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from app.config import settings
-from app.routers import auth, upload, analysis
+from app.routers import auth, upload, analysis, profile
 from app.exceptions import register_exception_handlers
+
+# Ensure profiles directory exists
+os.makedirs("data/profiles", exist_ok=True)
+
+# Setup Basic Logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 limiter = Limiter(key_func=get_remote_address)
 
@@ -36,6 +48,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(upload.router, prefix=settings.API_V1_STR)
 app.include_router(analysis.router, prefix=settings.API_V1_STR)
+app.include_router(profile.router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 def root():

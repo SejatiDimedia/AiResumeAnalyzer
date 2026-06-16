@@ -255,8 +255,8 @@ re_
 
 ### 3.1 AI Service (2–3 hari)
 
-- [ ] Setup `OPENAI_API_KEY` di `.env`
-- [ ] Buat `services/ai_service.py`:
+- [x] Setup `OPENAI_API_KEY` (Diganti `GEMINI_API_KEY`) di `.env`
+- [x] Buat `services/ai_service.py`:
   ```python
   SYSTEM_PROMPT = """
   You are an expert resume reviewer and career coach.
@@ -282,9 +282,9 @@ re_
       # Validate schema output
       # Return dict
   ```
-- [ ] Tambah timeout handling (30 detik max)
-- [ ] Tambah retry logic sederhana: jika OpenAI timeout, retry 1x
-- [ ] Tambah error handling: jika OpenAI API down → 503 response ke user dengan pesan jelas
+- [x] Tambah timeout handling (via Gemini SDK)
+- [ ] Tambah retry logic sederhana: jika API timeout, retry 1x
+- [x] Tambah error handling: jika API down → return error ke user dengan pesan jelas
 
 ### 3.2 Wire Up ke Analysis Endpoint (1 hari)
 
@@ -294,25 +294,25 @@ re_
   3. Call `ai_service.analyze_resume(resume_text, job_description)` (Masih Mocking)
   4. Call `analysis_service.create_analysis(...)` dengan result AI
   5. Return response
-- [ ] Tambah rate limit: max 10 request/jam per user di endpoint ini
+- [x] Tambah rate limit: max 10 request/jam per user di endpoint ini
 
 ### 3.3 Prompt Tuning (1–2 hari)
 
-- [ ] Test dengan berbagai kombinasi resume + JD:
+- [x] Test dengan berbagai kombinasi resume + JD:
   - Resume sangat relevan → score seharusnya tinggi (>80)
   - Resume tidak relevan sama sekali → score seharusnya rendah (<30)
   - Resume bahasa Indonesia + JD bahasa Inggris → harus bisa handle
   - Resume dengan format aneh (banyak tabel) → teks masih bisa diekstrak
-- [ ] Iterasi prompt jika output tidak konsisten atau tidak akurat
-- [ ] Pastikan JSON output selalu valid (tidak ada kasus malformed JSON)
-- [ ] Catat estimasi token per request → hitung cost per analisis
+- [x] Iterasi prompt jika output tidak konsisten atau tidak akurat
+- [x] Pastikan JSON output selalu valid (tidak ada kasus malformed JSON)
+- [x] Catat estimasi token per request → hitung cost per analisis
 
 **Checklist akhir Phase 3:**
-- [x] Full flow end-to-end bekerja: upload PDF → dapat AI result (Mock Data Backend)
-- [ ] Score masuk akal untuk resume yang relevan vs tidak relevan
-- [ ] Suggestions spesifik dan actionable (bukan generik)
-- [ ] Error OpenAI API → user dapat pesan error yang informatif
-- [ ] Cost per analisis < $0.02
+- [x] Full flow end-to-end bekerja: upload PDF → dapat AI result (Real Data via Gemini)
+- [x] Score masuk akal untuk resume yang relevan vs tidak relevan
+- [x] Suggestions spesifik dan actionable (bukan generik)
+- [x] Error API → user dapat pesan error yang informatif
+- [x] Cost per analisis < $0.02 (Menggunakan Free Tier)
 
 **Deliverable Phase 3:** Aplikasi fully functional end-to-end.
 
@@ -324,27 +324,27 @@ re_
 
 ### 4.1 Security Hardening (2 hari)
 
-- [ ] **JWT Cookie:** Pastikan token disimpan di httpOnly cookie, bukan localStorage
-- [ ] **CORS:** Set `allow_origins` ke domain spesifik, bukan `*`
-- [ ] **Rate Limiting Review:**
+- [~] **JWT Cookie:** Pastikan token disimpan di httpOnly cookie, bukan localStorage (Dipertahankan di klien untuk MVP)
+- [x] **CORS:** Set `allow_origins` ke domain spesifik, bukan `*`
+- [x] **Rate Limiting Review:**
   - Login: 5 attempt/menit per IP ✓
   - Register: 3 attempt/menit per IP
   - Analysis: 10 request/jam per user ✓
-- [ ] **Input Sanitization:**
+- [x] **Input Sanitization:**
   - Truncate resume text jika > 8000 kata (untuk kontrol cost token)
   - Truncate job description jika > 3000 kata
-- [ ] **File Validation:** Double check MIME type validation (tidak hanya ekstensi)
-- [ ] **Secret Key:** Pastikan `SECRET_KEY` panjang dan random (min 32 karakter)
-- [ ] **SQL Injection:** Semua query sudah pakai SQLAlchemy ORM (aman by default)
+- [x] **File Validation:** Double check MIME type validation (tidak hanya ekstensi)
+- [x] **Secret Key:** Pastikan `SECRET_KEY` panjang dan random (min 32 karakter)
+- [x] **SQL Injection:** Semua query sudah pakai SQLAlchemy ORM (aman by default)
 - [ ] **HTTPS:** Pastikan production berjalan di HTTPS
 
 ### 4.2 UX Polish (2 hari)
 
-- [ ] **Loading States:** Semua action async punya loading state yang jelas
-- [ ] **Error Messages:** Semua error ditampilkan dengan bahasa yang ramah user (bukan stack trace)
-- [ ] **Empty States:** Dashboard kosong, hasil keyword kosong — semua punya state yang bagus
-- [ ] **Responsive:** Test di mobile (375px) dan tablet (768px)
-- [ ] **Form UX:**
+- [x] **Loading States:** Semua action async punya loading state yang jelas
+- [x] **Error Messages:** Semua error ditampilkan dengan bahasa yang ramah user (bukan stack trace)
+- [x] **Empty States:** Dashboard kosong, hasil keyword kosong — semua punya state yang bagus
+- [x] **Responsive:** Test di mobile (375px) dan tablet (768px)
+- [x] **Form UX:**
   - Disable tombol submit saat loading
   - Auto-focus field pertama saat halaman load
   - Enter di field JD tidak submit form (textarea)
@@ -364,7 +364,7 @@ re_
 
 ### 4.4 Logging (0.5 hari)
 
-- [ ] Setup basic logging di FastAPI:
+- [x] Setup basic logging di FastAPI:
   ```python
   import logging
   logging.basicConfig(level=logging.INFO)
@@ -373,8 +373,8 @@ re_
   # Log setiap analysis request (user_id, duration, match_score)
   # Log setiap error (tanpa expose sensitive data)
   ```
-- [ ] Pastikan tidak ada `print()` di production code (ganti ke `logger`)
-- [ ] Log OpenAI API errors dengan context yang cukup untuk debug
+- [x] Pastikan tidak ada `print()` di production code (ganti ke `logger`)
+- [x] Log API errors dengan context yang cukup untuk debug
 
 **Deliverable Phase 4:** Aplikasi aman, responsif, dan nyaman dipakai.
 

@@ -10,6 +10,7 @@
         <nav class="hidden md:flex items-center gap-xl">
           <NuxtLink to="/dashboard" class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary pb-1">History</NuxtLink>
           <NuxtLink to="/analyze" class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors">Analysis</NuxtLink>
+          <NuxtLink to="/profile" class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors">Profile</NuxtLink>
           <NuxtLink to="/settings" class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors">Settings</NuxtLink>
         </nav>
         
@@ -50,7 +51,7 @@
           <span class="font-label-sm text-[11px] mt-1 group-hover:text-primary transition-colors">Analyze</span>
         </NuxtLink>
         <!-- Profile -->
-        <NuxtLink to="/settings" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 px-4 py-1 rounded-xl" active-class="text-primary font-bold bg-primary-fixed/20" inactive-class="text-on-surface-variant bg-transparent font-normal">
+        <NuxtLink to="/profile" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 px-4 py-1 rounded-xl" active-class="text-primary font-bold bg-primary-fixed/20" inactive-class="text-on-surface-variant bg-transparent font-normal">
           <span class="material-symbols-outlined mb-1">person</span>
           <span class="font-label-sm text-[11px]">Profile</span>
         </NuxtLink>

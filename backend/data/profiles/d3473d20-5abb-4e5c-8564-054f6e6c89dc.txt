@@ -1,0 +1,104 @@
+RINGKASAN PROFESIONAL
+Software Developer dengan pengalaman lebih dari 5 tahun dalam merancang dan
+mengembangkan sistem ERP, ekosistem SaaS, serta aplikasi mobile. Fokus utama saya
+adalah membangun arsitektur perangkat lunak yang stabil, efisien, dan mudah
+dikembangkan sesuai dengan kebutuhan operasional perusahaan. Berpengalaman dalam
+mengolah alur kerja dan logika bisnis yang rumit menjadi sistem digital yang mudah
+digunakan. Beberapa area yang sering saya tangani meliputi otomatisasi sistem
+manufaktur, pengelolaan manajemen pergudangan, serta integrasi data antarplatform
+untuk memastikan pertukaran informasi berjalan lancar. Saya terbiasa menyelaraskan
+kebutuhan bisnis dengan implementasi teknis di lapangan. Dengan pendekatan yang
+terstruktur, saya berkomitmen untuk menghadirkan solusi teknologi yang andal, efisien,
+dan dapat diandalkan untuk mendukung operasional perusahaan dalam jangka panjang.
+PENGALAMAN KERJA
+PENDIDIKAN
+S1 Informatika
+Universitas Amikom Yogyakarta (IPK 3.7)
+2016 - 2020
+KEAHLIAN
+LANGUAGES
+Javascript
+Typescript
+PHP
+Python
+Dart
+DATABASE
+MySQL
+PostgreSQL
+MongoDB
+Supabase
+Firebase
+FRAMEWORKS & LIBRARIES
+React
+Astro
+Nexjt Js
+Angular
+Vue
+Tailwind
+Laravel
+Flutter
+React Native
+DEVELOPMENT LIFECYCLE
+System Design
+Docker
+CI/CD
+Github
+RESTful API
+Database Modeling Drizzle
+AI-Powered Workflow
+PINDAI UNTUK MELIHAT
+PORTOFOLIO INTERAKTIF
+https://glio.vercel.app/p/timurradhadian
+Software Developer
+Tanjung Kreasi Parquet Industri (DSN GROUP)
+Februari 2021 - Mei 2026
+Temanggung
+➤ Integrated ERP Development: Merancang dan membangun ekosistem ERP kustom
+menggunakan Laravel dan Angular yang mengotomatisasi seluruh alur kerja produksi,
+perencanaan (Work Order), hingga manajemen inventaris secara end-to-end.
+➤ Operational Logic & Automation: Mengembangkan mesin kalkulasi otomatis untuk proses
+penerimaan dan pengolahan material yang mampu melakukan validasi data secara real-time,
+sehingga meminimalisir kesalahan input manual dan meningkatkan akurasi data inventaris
+secara signifikan.
+➤ Regulatory & Traceability Compliance: Mengimplementasikan sistem pelacakan material
+yang kompleks untuk memenuhi regulasi industri dan standar kepatuhan internasional,
+memastikan transparansi data dari level pemasok hingga ke unit produksi.
+➤ Data Analytics & Monitoring: Membangun dasbor pelaporan dan alat analisis statistik
+untuk memantau konsistensi kualitas produksi serta sinkronisasi data antar sistem, guna
+mendukung pengambilan keputusan manajemen yang berbasis data.
+➤ External Integration & Partnership: Mengembangkan platform kolaborasi yang
+menghubungkan vendor dan pihak eksternal dengan sistem internal perusahaan,
+mempercepat proses pengadaan barang dan sinkronisasi logistik secara digital.
+➤ Dynamic Architecture & Scalability: Merancang arsitektur sistem yang fleksibel
+menggunakan konfigurasi master-data driven, memungkinkan penyesuaian fitur dan struktur
+data secara dinamis tanpa memerlukan perubahan pada kode utama.
+➤ System Security & Stability: Mengelola kontrol akses granular dan integritas database
+untuk menjaga keamanan data sensitif perusahaan, serta memastikan sistem tetap stabil
+dalam menangani volume transaksi besar di lingkungan manufaktur 24/7.
+Timur Dian Radha Sejati
+Software Developer
+timur7dian84@gmail.com
++62 89508436275
+Balikpapan, Indonesia
+glio.vercel.app/p/timurradhadian
+in/timurradhadian
+SejatiDimedia
+
+Independent Developer & Architect
+Sejati Dimedia (Digital Product Brand)
+April 2024 - Sekarang
+➤ Scalable Ecosystem Architecture: Merancang dan membangun ekosistem aplikasi
+manajemen (SediaPos, SediaArchive, SediaArtha) secara end-to-end dengan fokus pada
+skalabilitas dan integrasi antar produk yang fungsional.
+➤ Modern Tech Stack Implementation: Mengimplementasikan teknologi mutakhir seperti
+Next.js, Supabase, dan Tailwind CSS untuk menghasilkan aplikasi berperforma tinggi dengan
+desain antarmuka yang modern, minimalis, dan responsif.
+➤ AI-Driven Development Workflow: Mengadopsi metode AI-assisted coding untuk
+mempercepat siklus pengembangan (fast-delivery) serta mengintegrasikan API kecerdasan
+buatan untuk otomatisasi tugas dan pengolahan metadata.
+➤ Full-Lifecycle Software Engineering: Mengelola seluruh siklus hidup pengembangan
+perangkat lunak, mulai dari desain skema database yang efisien hingga strategi deployment
+yang stabil untuk memastikan produk siap digunakan oleh pengguna.
+➤ Independent Product Strategy: Bertanggung jawab penuh atas roadmap produk, mulai dari
+analisis kebutuhan pasar hingga pemilihan teknologi, guna menciptakan solusi digital yang
+relevan dan solutif bagi pengguna akhir.

@@ -9,7 +9,7 @@ bcrypt==3.2.2
 python-multipart
 pypdf2
 python-docx
-openai
+google-genai
 slowapi
 pytest
 pytest-asyncio
